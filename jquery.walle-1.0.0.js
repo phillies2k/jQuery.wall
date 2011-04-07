@@ -16,8 +16,7 @@
                 type: 'post',
                 delay: 5000,
                 duration: 2500,
-                effect: 'morph',
-                frame: false
+                effect: 'morph'
             },
             $ul = $('<ul>').addClass('wall-e').prependTo($('body')),
             preload = new Image(),
@@ -48,12 +47,8 @@
                 $($ul.children()[current]).width(nw).height(nh);
             },
             change = function() {
-                if (++current == images.length) {
-                    current = 0;
-                    onload();
-                } else {
-                    preload.src = images[current];
-                }
+                if (++current == images.length) current = 0;
+                preload.src = images[ current ];
             },
             timer = function() {
                 setTimeout(change, settings.delay);
@@ -102,14 +97,16 @@
         } else if (args[0] && $.isArray(args[0])) {
             $.extend(settings, args[1] || {});
             build( args[0] );
-            preload.src = images[ Math.round(Math.random() * images.length) ];
+            current = Math.ceil(Math.random() * images.length) - 1;
+            preload.src = images[ current ];
         } else if (args[0] && $(args[0]).is(args[0])) {
             $ul.remove();
             $ul = $(args[0]).addClass('wall-e').children().each(function(){
                 images.push( ($(this).css('background-image')).replace(/url\(("|')*([^$1\)]+)$1*\)/, "$2") );
                 $(this).addClass('wall-e-item').hide();
             }).prependTo($('body'));
-            preload.src = images[ Math.round(Math.random() * images.length) ];
+            current = Math.ceil(Math.random() * images.length) - 1;
+            preload.src = images[ current ];
         } else {
             if (console && $.isFunction(console.log)) {
                 console.log('$.wall requires at least one argument. This can either be an single array containing image urls,' +
